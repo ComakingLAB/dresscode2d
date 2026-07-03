@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ordine magliette e felpe scuola</title>
+<style>
+  :root{
+    --ink:#1c2b4a;
+    --ink-soft:#4a5a7a;
+    --paper:#eef1f5;
+    --card:#ffffff;
+    --gold:#c99a3b;
+    --gold-dark:#8a6a24;
+    --gold-pale:#f6ecd4;
+    --red:#b23a48;
+    --red-pale:#f7e3e5;
+    --line:#d6dbe4;
+    --green:#3b7d52;
+    --green-pale:#e3f0e7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px;}
+  header.top{background:var(--ink);color:#fff;padding:34px 0 0;margin-bottom:28px;}
+  header.top .wrap{display:flex;flex-direction:column;gap:4px;}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700;}
+  h1{margin:2px 0 4px;font-size:30px;font-weight:800;letter-spacing:-.01em;}
+  .sub{color:#c3cbdc;font-size:14px;margin:0 0 22px;}
+  .tabs{display:flex;gap:2px;margin-top:6px;}
+  .tab{
+    background:transparent;border:none;color:#c3cbdc;
+    padding:12px 18px;font-size:13px;font-weight:700;cursor:pointer;
+    border-bottom:3px solid transparent;font-family:inherit;
+  }
+  .tab.active{color:#fff;border-bottom-color:var(--gold);}
+  .tab:hover{color:#fff;}
+  h2{
+    font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);
+    font-weight:800;margin:0 0 14px;display:flex;align-items:center;gap:10px;
+  }
+  h2::after{content:"";flex:1;height:1px;background:var(--line);}
+  section{margin-bottom:34px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px;}
+  label{display:block;font-size:12px;font-weight:700;color:var(--ink-soft);margin:0 0 5px;}
+  input[type=text],input[type=password],input[type=number],select{
+    width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;
+    font-size:14px;background:#fff;color:var(--ink);font-family:inherit;
+  }
+  input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;}
+  .field{margin-bottom:14px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .item-row{
+    display:grid;grid-template-columns:1fr 1fr 90px 34px;gap:10px;align-items:end;
+    margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--line);
+  }
+  .item-row:last-of-type{border-bottom:none;}
+  .btn{
+    border:1px solid var(--ink);background:#fff;color:var(--ink);padding:9px 16px;
+    border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;
+  }
+  .btn:hover{background:var(--paper);}
+  .btn-add{border-style:dashed;color:var(--ink-soft);width:100%;margin-top:2px;}
+  .btn-primary{
+    background:var(--ink);color:#fff;border-color:var(--ink);width:100%;
+    padding:12px;font-size:14px;margin-top:8px;
+  }
+  .btn-primary:hover{background:#132038;}
+  .btn-primary:disabled{opacity:.6;cursor:default;}
+  .btn-cancel{background:#fff;color:var(--ink-soft);width:100%;margin-top:8px;}
+  .btn-remove{
+    height:36px;width:34px;display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line);background:#fff;color:var(--red);border-radius:7px;
+    cursor:pointer;font-size:16px;line-height:1;
+  }
+  .btn-remove:hover{background:var(--red-pale);}
+  .msg{font-size:13px;margin-top:10px;padding:9px 12px;border-radius:7px;display:none;}
+  .msg.ok{display:block;background:var(--green-pale);color:var(--green);}
+  .msg.err{display:block;background:var(--red-pale);color:var(--red);}
+  .whoami{
+    display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;background:var(--gold-pale);
+    border:1px solid var(--gold);border-radius:10px;padding:14px 18px;margin-bottom:24px;
+  }
+  .whoami .field{margin:0;flex:1;min-width:180px;}
+  .whoami label{color:var(--gold-dark);}
+  .tag{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin-bottom:10px;position:relative;}
+  .tag::before{content:"";position:absolute;left:-1px;top:14px;bottom:14px;width:4px;background:var(--gold);border-radius:0 3px 3px 0;}
+  .tag-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .tag-child{font-weight:800;font-size:15px;}
+  .tag-parent{font-size:12.5px;color:var(--ink-soft);}
+  .tag-date{font-size:11px;color:#9aa4b8;white-space:nowrap;}
+  .tag-items{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .pill{
+    font-family:"Courier New",monospace;font-size:12px;background:var(--paper);
+    border:1px solid var(--line);border-radius:5px;padding:3px 9px;font-weight:700;color:var(--ink);
+  }
+  .tag-actions{margin-top:10px;display:flex;gap:16px;}
+  .link-del,.link-edit{background:none;border:none;font-size:12px;cursor:pointer;font-weight:700;padding:0;font-family:inherit;}
+  .link-del{color:var(--red);}
+  .link-edit{color:var(--ink-soft);}
+  .link-del:hover,.link-edit:hover{text-decoration:underline;}
+  .empty{color:#9aa4b8;font-size:13.5px;text-align:center;padding:30px 10px;border:1px dashed var(--line);border-radius:10px;}
+  table.summary{width:100%;border-collapse:collapse;font-size:13.5px;}
+  table.summary th{
+    text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--ink-soft);padding:0 8px 8px;border-bottom:2px solid var(--ink);
+  }
+  table.summary td{padding:9px 8px;border-bottom:1px solid var(--line);}
+  table.summary td.num{font-family:"Courier New",monospace;font-weight:700;text-align:right;}
+  table.summary tr.tot td{border-top:2px solid var(--ink);border-bottom:none;font-weight:800;background:var(--gold-pale);}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px;}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+  .stat .n{font-size:26px;font-weight:800;font-family:"Courier New",monospace;}
+  .stat .l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);}
+  .loading{text-align:center;color:#9aa4b8;font-size:13px;padding:16px;}
+  .lockcard{max-width:340px;margin:0 auto;text-align:center;}
+  .lockcard i{display:block;font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .badge-admin{
+    display:inline-block;background:var(--green-pale);color:var(--green);font-size:11px;
+    font-weight:800;padding:3px 10px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;letter-spacing:.04em;
+  }
+  .logout{font-size:12px;color:var(--ink-soft);background:none;border:none;cursor:pointer;font-weight:700;text-decoration:underline;margin-left:8px;}
+  .conn{font-size:11px;color:#9aa4b8;text-align:center;margin-top:-18px;margin-bottom:20px;}
+  #adminView,#familyView{display:none;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <span class="eyebrow">Ordine cumulativo classe</span>
+    <h1>Magliette &amp; felpe con logo scuola</h1>
+    <p class="sub">Inserisci qui gli articoli per tuo figlio o tua figlia. Il totale si aggiorna per tutti in tempo reale.</p>
+    <div class="tabs">
+      <button class="tab active" id="tabFamily">Genitori</button>
+      <button class="tab" id="tabAdmin">Area amministratore</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="conn" id="connStatus">Connessione al database…</div>
+
+  <!-- ===== VISTA GENITORI ===== -->
+  <div id="familyView">
+
+    <div class="whoami">
+      <div class="field">
+        <label for="parentName">Il tuo nome (genitore)</label>
+        <input type="text" id="parentName" placeholder="es. Maria Rossi">
+      </div>
+      <button class="btn" id="saveNameBtn">Ricorda il mio nome</button>
+    </div>
+
+    <section>
+      <h2>Aggiungi ordine</h2>
+      <div class="card">
+        <div class="row2">
+          <div class="field">
+            <label for="childName">Nome del bambino / bambina</label>
+            <input type="text" id="childName" placeholder="es. Luca">
+          </div>
+          <div class="field">
+            <label for="orderParent">Genitore che inserisce</label>
+            <input type="text" id="orderParent" placeholder="es. Maria Rossi">
+          </div>
+        </div>
+        <label style="margin-top:6px;">Capi da ordinare</label>
+        <div id="itemRows"></div>
+        <button class="btn btn-add" id="addRowBtn" type="button">+ Aggiungi un altro capo</button>
+        <button class="btn btn-primary" id="submitOrderBtn" type="button">Salva ordine</button>
+        <div class="msg" id="formMsg"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>I tuoi ordini</h2>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:-8px;">Mostra gli ordini inseriti con il nome che hai scritto sopra. Le altre famiglie non vedono i tuoi dati, e tu non vedi i loro.</p>
+      <div id="myOrdersList"><div class="loading">Caricamento…</div></div>
+    </section>
+
+    <section>
+      <h2>Riepilogo cumulativo classe</h2>
+      <div class="stats" id="statsRowFamily"></div>
+      <div class="card">
+        <table class="summary" id="summaryTableFamily">
+          <thead><tr><th>Articolo</th><th>Taglia</th><th style="text-align:right;">Quantità</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== VISTA AMMINISTRATORE ===== -->
+  <div id="adminView">
+
+    <div id="adminLocked" class="card lockcard">
+      <h2 style="justify-content:center;">Accesso amministratore</h2>
+      <div class="field" style="text-align:left;">
+        <label for="adminPass">Password</label>
+        <input type="password" id="adminPass" placeholder="Inserisci password">
+      </div>
+      <button class="btn btn-primary" id="adminLoginBtn" type="button">Entra</button>
+      <div class="msg" id="adminMsg"></div>
+      <i>Solo per l'organizzatore dell'ordine cumulativo.</i>
+    </div>
+
+    <div id="adminUnlocked" style="display:none;">
+      <span class="badge-admin">Modalità amministratore</span>
+      <button class="logout" id="adminLogoutBtn">Esci</button>
+
+      <section>
+        <h2 id="adminFormTitle">Aggiungi ordine (per conto di una famiglia)</h2>
+        <div class="card">
+          <div class="row2">
+            <div class="field">
+              <label for="adminChildName">Nome del bambino / bambina</label>
+              <input type="text" id="adminChildName" placeholder="es. Luca">
+            </div>
+            <div class="field">
+              <label for="adminParentName">Nome del genitore</label>
+              <input type="text" id="adminParentName" placeholder="es. Maria Rossi">
+            </div>
+          </div>
+          <label style="margin-top:6px;">Capi da ordinare</label>
+          <div id="adminItemRows"></div>
+          <button class="btn btn-add" id="adminAddRowBtn" type="button">+ Aggiungi un altro capo</button>
+          <button class="btn btn-primary" id="adminSubmitBtn" type="button">Salva ordine</button>
+          <button class="btn btn-cancel" id="adminCancelEditBtn" type="button" style="display:none;">Annulla modifica</button>
+          <div class="msg" id="adminFormMsg"></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Tutti gli ordini</h2>
+        <div id="allOrdersList"><div class="loading">Caricamento…</div></div>
+      </section>
+
+      <section>
+        <h2>Riepilogo cumulativo</h2>
+        <div class="stats" id="statsRowAdmin"></div>
+        <div class="card">
+          <table class="summary" id="summaryTableAdmin">
+            <thead><tr><th>Articolo</th><th>Taglia</th><th style="text-align:right;">Quantità</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+</div>
+
+<!-- Firebase (compat SDK, semplice da usare senza strumenti di build) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+/* ============ CONFIGURAZIONE ============ */
+/* Per cambiare la password amministratore, modifica il valore qui sotto. */
+const ADMIN_PASSWORD = "scuola2026";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAGBlfa7G-vmeZXscjZFH2vaFz7DLN1HGM",
+  authDomain: "dresscode2d.firebaseapp.com",
+  projectId: "dresscode2d",
+  storageBucket: "dresscode2d.firebasestorage.app",
+  messagingSenderId: "632460769742",
+  appId: "1:632460769742:web:2373aac19860bcd7d0939f",
+  measurementId: "G-XP1P6145WQ"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const ordersCollection = db.collection('orders');
+
+/* ============ STATO ============ */
+const SIZES = ["5/6","6/7","7/8"];
+const TYPES = ["Maglietta","Felpa"];
+let orders = [];
+let adminUnlocked = false;
+let editingId = null;
+
+/* ---------- tab switching ---------- */
+document.getElementById('tabFamily').addEventListener('click', () => switchTab('family'));
+document.getElementById('tabAdmin').addEventListener('click', () => switchTab('admin'));
+
+function switchTab(which){
+  document.getElementById('familyView').style.display = which === 'family' ? 'block' : 'none';
+  document.getElementById('adminView').style.display = which === 'admin' ? 'block' : 'none';
+  document.getElementById('tabFamily').classList.toggle('active', which === 'family');
+  document.getElementById('tabAdmin').classList.toggle('active', which === 'admin');
+  if (which === 'admin' && adminUnlocked) renderAdmin();
+  if (which === 'family') renderFamily();
+}
+
+/* ---------- item rows (helper condiviso dai due form) ---------- */
+function makeItemRow(){
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <div class="field" style="margin:0;">
+      <label>Tipo</label>
+      <select class="row-type">${TYPES.map(t=>`<option value="${t}">${t}</option>`).join('')}</select>
+    </div>
+    <div class="field" style="margin:0;">
+      <label>Taglia</label>
+      <select class="row-size">${SIZES.map(s=>`<option value="${s}">${s}</option>`).join('')}</select>
+    </div>
+    <div class="field" style="margin:0;">
+      <label>Quantità</label>
+      <input type="number" class="row-qty" min="1" value="1">
+    </div>
+    <button class="btn-remove" type="button" title="Rimuovi capo">×</button>
+  `;
+  row.querySelector('.btn-remove').addEventListener('click', () => {
+    const rows = row.parentElement.querySelectorAll('.item-row');
+    if (rows.length > 1) row.remove();
+  });
+  return row;
+}
+
+function resetItemRows(containerId){
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  container.appendChild(makeItemRow());
+}
+
+function readItemRows(containerId){
+  const rows = document.querySelectorAll('#' + containerId + ' .item-row');
+  const items = [];
+  rows.forEach(row => {
+    const tipo = row.querySelector('.row-type').value;
+    const size = row.querySelector('.row-size').value;
+    const qty = parseInt(row.querySelector('.row-qty').value, 10);
+    if (qty > 0) items.push({tipo, taglia: size, quantita: qty});
+  });
+  return items;
+}
+
+function fillItemRows(containerId, items){
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  items.forEach(it => {
+    const row = makeItemRow();
+    row.querySelector('.row-type').value = it.tipo;
+    row.querySelector('.row-size').value = it.taglia;
+    row.querySelector('.row-qty').value = it.quantita;
+    container.appendChild(row);
+  });
+  if (items.length === 0) container.appendChild(makeItemRow());
+}
+
+document.getElementById('addRowBtn').addEventListener('click', () => {
+  document.getElementById('itemRows').appendChild(makeItemRow());
+});
+document.getElementById('adminAddRowBtn').addEventListener('click', () => {
+  document.getElementById('adminItemRows').appendChild(makeItemRow());
+});
+
+function showMsg(elId, text, ok){
+  const el = document.getElementById(elId);
+  el.textContent = text;
+  el.className = 'msg ' + (ok ? 'ok' : 'err');
+  setTimeout(() => { el.className = 'msg'; }, 4000);
+}
+
+/* ---------- nome genitore: salvato solo su questo dispositivo (localStorage) ---------- */
+function loadParentName(){
+  try{
+    const name = localStorage.getItem('current_parent_name');
+    if (name){
+      document.getElementById('parentName').value = name;
+      document.getElementById('orderParent').value = name;
+    }
+  }catch(e){}
+}
+
+document.getElementById('saveNameBtn').addEventListener('click', () => {
+  const name = document.getElementById('parentName').value.trim();
+  if (!name) return;
+  try{
+    localStorage.setItem('current_parent_name', name);
+    document.getElementById('orderParent').value = name;
+    showMsg('formMsg', 'Nome salvato su questo dispositivo.', true);
+    renderFamily();
+  }catch(e){
+    showMsg('formMsg', 'Non sono riuscito a salvare il nome su questo dispositivo.', false);
+  }
+});
+
+/* ---------- genitori: nuovo ordine ---------- */
+document.getElementById('submitOrderBtn').addEventListener('click', async () => {
+  const parentName = document.getElementById('orderParent').value.trim();
+  const childName = document.getElementById('childName').value.trim();
+  if (!parentName || !childName){
+    showMsg('formMsg', 'Inserisci il nome del genitore e del bambino.', false);
+    return;
+  }
+  const items = readItemRows('itemRows');
+  if (items.length === 0){
+    showMsg('formMsg', 'Aggiungi almeno un capo con quantità valida.', false);
+    return;
+  }
+  const btn = document.getElementById('submitOrderBtn');
+  btn.disabled = true; btn.textContent = 'Salvataggio…';
+  try{
+    await ordersCollection.add({
+      parentName, childName, items,
+      createdAt: new Date().toISOString()
+    });
+    showMsg('formMsg', 'Ordine salvato per ' + childName + '.', true);
+    document.getElementById('childName').value = '';
+    resetItemRows('itemRows');
+  }catch(e){
+    showMsg('formMsg', 'Errore nel salvataggio. Controlla la connessione e riprova.', false);
+  }finally{
+    btn.disabled = false; btn.textContent = 'Salva ordine';
+  }
+});
+
+/* ---------- admin: login ---------- */
+document.getElementById('adminLoginBtn').addEventListener('click', () => {
+  const pass = document.getElementById('adminPass').value;
+  if (pass === ADMIN_PASSWORD){
+    adminUnlocked = true;
+    document.getElementById('adminLocked').style.display = 'none';
+    document.getElementById('adminUnlocked').style.display = 'block';
+    document.getElementById('adminPass').value = '';
+    renderAdmin();
+  }else{
+    showMsg('adminMsg', 'Password errata.', false);
+  }
+});
+document.getElementById('adminPass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('adminLoginBtn').click();
+});
+document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+  adminUnlocked = false;
+  document.getElementById('adminLocked').style.display = 'block';
+  document.getElementById('adminUnlocked').style.display = 'none';
+  cancelEdit();
+});
+
+/* ---------- admin: aggiungi / modifica ordine ---------- */
+function startEdit(order){
+  editingId = order.id;
+  document.getElementById('adminFormTitle').textContent = 'Modifica ordine di ' + order.childName;
+  document.getElementById('adminChildName').value = order.childName;
+  document.getElementById('adminParentName').value = order.parentName;
+  fillItemRows('adminItemRows', order.items);
+  document.getElementById('adminSubmitBtn').textContent = 'Aggiorna ordine';
+  document.getElementById('adminCancelEditBtn').style.display = 'block';
+  window.scrollTo({top: document.getElementById('adminFormTitle').offsetTop - 20, behavior:'smooth'});
+}
+
+function cancelEdit(){
+  editingId = null;
+  document.getElementById('adminFormTitle').textContent = 'Aggiungi ordine (per conto di una famiglia)';
+  document.getElementById('adminChildName').value = '';
+  document.getElementById('adminParentName').value = '';
+  resetItemRows('adminItemRows');
+  document.getElementById('adminSubmitBtn').textContent = 'Salva ordine';
+  document.getElementById('adminCancelEditBtn').style.display = 'none';
+}
+document.getElementById('adminCancelEditBtn').addEventListener('click', cancelEdit);
+
+document.getElementById('adminSubmitBtn').addEventListener('click', async () => {
+  const parentName = document.getElementById('adminParentName').value.trim();
+  const childName = document.getElementById('adminChildName').value.trim();
+  if (!parentName || !childName){
+    showMsg('adminFormMsg', 'Inserisci il nome del genitore e del bambino.', false);
+    return;
+  }
+  const items = readItemRows('adminItemRows');
+  if (items.length === 0){
+    showMsg('adminFormMsg', 'Aggiungi almeno un capo con quantità valida.', false);
+    return;
+  }
+  const btn = document.getElementById('adminSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Salvataggio…';
+  try{
+    if (editingId){
+      const existing = orders.find(o => o.id === editingId);
+      await ordersCollection.doc(editingId).set({
+        parentName, childName, items,
+        createdAt: existing ? existing.createdAt : new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+      showMsg('adminFormMsg', 'Ordine aggiornato.', true);
+    }else{
+      await ordersCollection.add({
+        parentName, childName, items,
+        createdAt: new Date().toISOString()
+      });
+      showMsg('adminFormMsg', 'Ordine salvato per ' + childName + '.', true);
+    }
+    cancelEdit();
+  }catch(e){
+    showMsg('adminFormMsg', 'Errore nel salvataggio. Controlla la connessione e riprova.', false);
+  }finally{
+    btn.disabled = false;
+    btn.textContent = editingId ? 'Aggiorna ordine' : 'Salva ordine';
+  }
+});
+
+/* ---------- elimina (solo admin) ---------- */
+async function deleteOrder(id, childName){
+  if (!adminUnlocked) return;
+  if (!confirm('Eliminare l\'ordine di ' + childName + '?')) return;
+  try{
+    await ordersCollection.doc(id).delete();
+    if (editingId === id) cancelEdit();
+  }catch(e){
+    alert('Non sono riuscito a eliminare l\'ordine.');
+  }
+}
+document.getElementById('allOrdersList').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const id = btn.getAttribute('data-id');
+  const order = orders.find(o => o.id === id);
+  if (!order) return;
+  if (btn.dataset.action === 'edit'){
+    startEdit(order);
+  }else if (btn.dataset.action === 'delete'){
+    deleteOrder(order.id, order.childName);
+  }
+});
+
+/* ---------- ascolto in tempo reale da Firestore ---------- */
+ordersCollection.onSnapshot(snapshot => {
+  document.getElementById('connStatus').textContent = 'Connesso · aggiornamento in tempo reale';
+  orders = snapshot.docs
+    .map(doc => ({ id: doc.id, ...doc.data() }))
+    .sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+  renderFamily();
+  if (adminUnlocked) renderAdmin();
+}, error => {
+  document.getElementById('connStatus').textContent = 'Impossibile connettersi al database.';
+  console.error(error);
+});
+
+/* ---------- utilità ---------- */
+function fmtDate(iso){
+  try{
+    const d = new Date(iso);
+    return d.toLocaleDateString('it-IT', {day:'2-digit',month:'2-digit',year:'2-digit'}) +
+           ' ' + d.toLocaleTimeString('it-IT', {hour:'2-digit',minute:'2-digit'});
+  }catch(e){ return ''; }
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML;
+}
+
+function computeTotals(list){
+  const totals = {};
+  let grandTotal = 0;
+  const childrenSet = new Set();
+  const parentsSet = new Set();
+  list.forEach(o => {
+    childrenSet.add(o.childName.toLowerCase() + '|' + o.parentName.toLowerCase());
+    parentsSet.add(o.parentName.toLowerCase());
+    o.items.forEach(it => {
+      const key = it.tipo + '|' + it.taglia;
+      totals[key] = (totals[key] || 0) + it.quantita;
+      grandTotal += it.quantita;
+    });
+  });
+  return {totals, grandTotal, childrenCount: childrenSet.size, parentsCount: parentsSet.size};
+}
+
+function renderSummaryInto(statsElId, tableElId, list){
+  const {totals, grandTotal, childrenCount, parentsCount} = computeTotals(list);
+  document.getElementById(statsElId).innerHTML = `
+    <div class="stat"><div class="n">${grandTotal}</div><div class="l">Capi totali</div></div>
+    <div class="stat"><div class="n">${childrenCount}</div><div class="l">Bambini</div></div>
+    <div class="stat"><div class="n">${parentsCount}</div><div class="l">Famiglie</div></div>
+  `;
+  const tbody = document.querySelector('#' + tableElId + ' tbody');
+  if (Object.keys(totals).length === 0){
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#9aa4b8;">Ancora nessun dato.</td></tr>';
+    return;
+  }
+  const rows = TYPES.flatMap(t => SIZES.map(s => ({tipo:t, taglia:s, qty: totals[t+'|'+s] || 0}))).filter(r => r.qty > 0);
+  tbody.innerHTML = rows.map(r => `<tr><td>${r.tipo}</td><td>${r.taglia}</td><td class="num">${r.qty}</td></tr>`).join('')
+    + `<tr class="tot"><td colspan="2">Totale</td><td class="num">${grandTotal}</td></tr>`;
+}
+
+/* ---------- rendering genitori ---------- */
+function renderFamily(){
+  renderSummaryInto('statsRowFamily', 'summaryTableFamily', orders);
+
+  const myName = document.getElementById('parentName').value.trim().toLowerCase();
+  const listEl = document.getElementById('myOrdersList');
+  if (!myName){
+    listEl.innerHTML = '<div class="empty">Scrivi il tuo nome sopra per vedere qui i tuoi ordini.</div>';
+    return;
+  }
+  const mine = orders.filter(o => o.parentName.trim().toLowerCase() === myName);
+  if (mine.length === 0){
+    listEl.innerHTML = '<div class="empty">Non hai ancora inserito ordini con questo nome.</div>';
+    return;
+  }
+  listEl.innerHTML = mine.map(o => `
+    <div class="tag">
+      <div class="tag-top">
+        <div>
+          <div class="tag-child">${escapeHtml(o.childName)}</div>
+          <div class="tag-parent">inserito da ${escapeHtml(o.parentName)}</div>
+        </div>
+        <div class="tag-date">${fmtDate(o.createdAt)}</div>
+      </div>
+      <div class="tag-items">
+        ${o.items.map(it => `<span class="pill">${it.quantita}× ${escapeHtml(it.tipo)} ${escapeHtml(it.taglia)}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ---------- rendering admin ---------- */
+function renderAdmin(){
+  renderSummaryInto('statsRowAdmin', 'summaryTableAdmin', orders);
+
+  const listEl = document.getElementById('allOrdersList');
+  if (orders.length === 0){
+    listEl.innerHTML = '<div class="empty">Nessun ordine inserito ancora.</div>';
+    return;
+  }
+  listEl.innerHTML = orders.map(o => `
+    <div class="tag">
+      <div class="tag-top">
+        <div>
+          <div class="tag-child">${escapeHtml(o.childName)}</div>
+          <div class="tag-parent">inserito da ${escapeHtml(o.parentName)}</div>
+        </div>
+        <div class="tag-date">${fmtDate(o.createdAt)}</div>
+      </div>
+      <div class="tag-items">
+        ${o.items.map(it => `<span class="pill">${it.quantita}× ${escapeHtml(it.tipo)} ${escapeHtml(it.taglia)}</span>`).join('')}
+      </div>
+      <div class="tag-actions">
+        <button class="link-edit" data-action="edit" data-id="${escapeHtml(o.id)}">Modifica</button>
+        <button class="link-del" data-action="delete" data-id="${escapeHtml(o.id)}">Elimina</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('parentName').addEventListener('input', renderFamily);
+
+/* ---------- init ---------- */
+resetItemRows('itemRows');
+resetItemRows('adminItemRows');
+switchTab('family');
+loadParentName();
+renderFamily();
+</script>
+
+</body>
+</html>
